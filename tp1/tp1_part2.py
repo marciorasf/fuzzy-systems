@@ -13,9 +13,7 @@ import imageio
 imageMatrix = imageio.imread("./data/photo002.jpg")
 flatImage = np.array([item for sublist in imageMatrix for item in sublist])
 
-print(flatImage.shape)
-
-data, centroids = cMeans(flatImage, 2)
+data, centroids = cMeans(flatImage, 2, 2)
 
 
 # %%

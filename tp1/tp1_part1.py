@@ -9,15 +9,7 @@ from functools import reduce
 from c_means import cMeans
 
 # %% Declare functions
-def printData():
-    fig = px.scatter(data, x="x0", y="x1")
-    fig.show()
-
-def printCentroids():
-    fig = px.scatter(centroids, x="x0", y="x1")
-    fig.show()
-
-def printDataAndCentroids():
+def printDataAndCentroids(data, centroids, keys):
     fig = make_subplots(x_title="x", y_title="y")
 
     # Add traces
@@ -43,4 +35,6 @@ def printDataAndCentroids():
 rawData = loadmat("./data/fcm_dataset.mat")
 
 # %% Run C-Means
-data, centroids = cMeans(rawData["x"], 4)
+data, centroids = cMeans(rawData["x"], 4, 10, 2)
+
+printDataAndCentroids(data, centroids, ["x0", "x1"])

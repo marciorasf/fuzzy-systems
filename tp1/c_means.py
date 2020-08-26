@@ -11,7 +11,7 @@ def euclNorm(arr):
     return np.linalg.norm(arr, ord=2)
 
 
-def cMeans(data, nClusters, mParam=2, maxIterations=False):
+def cMeans(data, nClusters, maxIterations=2, mParam=2):
     xDimension = data.shape[1]
 
     xColumns = [f"x{i}" for i in range(xDimension)]
@@ -36,7 +36,7 @@ def cMeans(data, nClusters, mParam=2, maxIterations=False):
         ] / (dfData[clusterCol] ** 2).sum()
 
     exponent = 2 / (mParam - 1)
-    for gen in range(2):
+    for gen in range(maxIterations):
         for row_label, row in dfData.iterrows():
             x = row[xColumns]
             for clusterCol in clusterColumns:
