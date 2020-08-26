@@ -7,6 +7,7 @@ from plotly.subplots import make_subplots
 import numpy as np
 from functools import reduce
 from c_means import cMeans
+from c_means_naive import cMeans as cMeansNaive
 
 # %% Declare functions
 def printDataAndCentroids(data, centroids, keys):
@@ -32,9 +33,11 @@ def printDataAndCentroids(data, centroids, keys):
     fig.show()
 
 # %% load data from file
-rawData = loadmat("./data/fcm_dataset.mat")
+rawData = loadmat("./tp1/data/fcm_dataset.mat")
+rawData = np.array(rawData["x"])
 
 # %% Run C-Means
-data, centroids = cMeans(rawData["x"], 4, 10, 2)
+data, centroids = cMeans(rawData, 4, 10, 2)
 
 printDataAndCentroids(data, centroids, ["x0", "x1"])
+print(centroids)
