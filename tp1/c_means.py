@@ -5,13 +5,14 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 from functools import reduce
+import copy
 
 
 def euclNorm(arr):
     return np.linalg.norm(arr, ord=2)
 
 
-def cMeans(data, nClusters, maxIterations=2, mParam=2):
+def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
     xDimension = data.shape[1]
     nRows = data.shape[0]
     xColumns = [f"x{i}" for i in range(xDimension)]
@@ -36,10 +37,11 @@ def cMeans(data, nClusters, maxIterations=2, mParam=2):
         ] / (dfData[clusterCol] ** 2).sum()
 
     exponent = 2 / (mParam - 1)
-    for gen in range(maxIterations):
+    for _ in range(maxIterations):
         for clusterCol in clusterColumns:
             X = dfData.loc[:, xColumns]
             denominator = np.zeros((nRows, 1))
+            
             for _, centroid in dfCentroids.iterrows():
                 tempNum = np.array(
                     list(
@@ -48,14 +50,16 @@ def cMeans(data, nClusters, maxIterations=2, mParam=2):
                             np.array((X - dfCentroids.loc[clusterCol, xColumns])),
                         )
                     )
-                ).reshape((nRows,1))
+                ).reshape((nRows, 1))
+
                 tempDen = (
                     np.array(list(map(euclNorm, np.array((X - centroid)))))
-                ).reshape((nRows,1))
-                tempFrac = (tempNum/tempDen)
-                tempRes = tempFrac**exponent
-                denominator += tempRes
-            dfData.loc[:, clusterCol] = np.ones((nRows, xDimension)) / denominator
+                ).reshape((nRows, 1))
+
+                denominator += (tempNum / tempDen) ** exponent
+            dfData.loc[:, clusterCol] = np.ones((nRows, 1)) / denominator
+
+        previousCentroids = copy.deepcopy(dfCentroids)
 
         for clusterCol in clusterColumns:
             dfCentroids.loc[clusterCol, :] = [
@@ -63,8 +67,24 @@ def cMeans(data, nClusters, maxIterations=2, mParam=2):
                     np.dot((dfData[clusterCol] ** mParam), dfData[xCol])
                     for xCol in xColumns
                 ]
-            ] / (dfData[clusterCol] ** 2).sum()
+            ] / (dfData[clusterCol] ** mParam).sum()
 
-        print(f"iteration {gen}")
+        delta = np.array(
+            list(
+                map(
+                    euclNorm,
+                    np.array(
+                        (
+                            dfCentroids.loc[:, xColumns]
+                            - previousCentroids.loc[:, xColumns]
+                        )
+                    ),
+                )
+            )
+        ).sum()
+        print(delta)
+
+        if delta < tolerance:
+            break
 
     return [dfData, dfCentroids]

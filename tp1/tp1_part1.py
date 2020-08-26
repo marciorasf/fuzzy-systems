@@ -14,30 +14,27 @@ def printDataAndCentroids(data, centroids, keys):
     fig = make_subplots(x_title="x", y_title="y")
 
     # Add traces
-    fig.add_trace(go.Scatter(
-        x=data["x0"], 
-        y=data["x1"], 
-        mode="markers", 
-        name="Input points"
-        ))
-    fig.add_trace(go.Scatter(
-        x=centroids["x0"], 
-        y=centroids["x1"], 
-        mode="markers", 
-        name="Centroids",
-        marker=dict(
-            color="red",
-            size=15
+    fig.add_trace(
+        go.Scatter(x=data["x0"], y=data["x1"], mode="markers", name="Input points")
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=centroids["x0"],
+            y=centroids["x1"],
+            mode="markers",
+            name="Centroids",
+            marker=dict(color="red", size=15),
         )
-        ))
+    )
     fig.show()
+
 
 # %% load data from file
 rawData = loadmat("./tp1/data/fcm_dataset.mat")
 rawData = np.array(rawData["x"])
 
 # %% Run C-Means
-data, centroids = cMeans(rawData, 4, 10, 2)
+data, centroids = cMeans(rawData, 4, 1e-12, 50, 2)
 
 printDataAndCentroids(data, centroids, ["x0", "x1"])
 print(centroids)
