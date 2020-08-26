@@ -3,23 +3,66 @@ from scipy.io import loadmat
 import pandas as pd
 import plotly.express as px
 import numpy as np
+from functools import reduce
 
 # %%
-data = loadmat('./K-Means/SyntheticDataset.mat')
-df = pd.DataFrame(data["x"], columns=["x", "y"])
-df.labes = ["x, y"]
-px.scatter(df, x="x", y="y")
+def euclNorm(arr):
+    return np.linalg.norm(arr, ord=2)
 
+
+def printData():
+    fig = px.scatter(data, x="x0", y="x1")
+    fig.show()
+
+
+def printCentroids():
+    fig = px.scatter(centroids, x="x0", y="x1")
+    fig.show()
+
+
+# %% Initialize data
 nClusters = 4
-for k in range(nClusters):
-  df.insert(
-    loc=2+k,
-    column=f'k{k}',
-    value=0
-  )
-  
-# %%
-for row_label, row in df.iterrows():
-  df.loc[row_label, 2:7] = np.random.dirichlet(np.ones(nClusters), size=1)[0]
+xDimension = 2
+mParam = 2
+
+xColumns = [f"x{i}" for i in range(xDimension)]
+clusterColumns = [f"k{i}" for i in range(nClusters)]
+
+rawData = loadmat("./K-Means/SyntheticDataset.mat")
+
+data = pd.DataFrame(rawData["x"], columns=xColumns)
+centroids = pd.DataFrame(
+    np.zeros((nClusters, xDimension)), columns=xColumns, index=clusterColumns,
+)
+
+for clusterCol in clusterColumns:
+    data[clusterCol] = 0
+
+for row_label, row in data.iterrows():
+    data.loc[row_label, clusterColumns] = np.random.dirichlet(
+        np.ones(nClusters), size=1
+    )[0]
+
+for clusterCol in clusterColumns:
+    centroids.loc[clusterCol, :] = [
+        [np.dot((data[clusterCol] ** mParam), data[xCol]) for xCol in xColumns]
+    ] / (data[clusterCol] ** 2).sum()
+
 
 # %%
+exponent = 2/(mParam-1)
+for _ in range(10):
+    for row_label, row in data.iterrows():
+        x = row[xColumns]
+        for clusterCol in clusterColumns:
+            denominator = 0
+            for centroid_label, centroid in centroids.iterrows():
+                denominator += (euclNorm(x-centroids.loc[clusterCol, :])/euclNorm(x-centroid))**exponent
+            row[clusterCol] = 1/denominator
+
+    for clusterCol in clusterColumns:
+        centroids.loc[clusterCol, :] = [
+            [np.dot((data[clusterCol] ** mParam), data[xCol]) for xCol in xColumns]
+        ] / (data[clusterCol] ** 2).sum()
+
+printCentroids()
