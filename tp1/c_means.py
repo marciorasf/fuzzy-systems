@@ -26,10 +26,9 @@ def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
     for clusterCol in clusterColumns:
         dfData[clusterCol] = 0
 
-    for row_label, _ in dfData.iterrows():
-        dfData.loc[row_label, clusterColumns] = np.random.dirichlet(
-            np.ones(nClusters), size=1
-        )[0]
+    dfData.loc[:,clusterColumns] = np.random.dirichlet(
+        np.ones(nClusters), size=(nRows)
+    )
 
     for clusterCol in clusterColumns:
         dfCentroids.loc[clusterCol, :] = [
@@ -37,7 +36,7 @@ def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
         ] / (dfData[clusterCol] ** 2).sum()
 
     exponent = 2 / (mParam - 1)
-    for _ in range(maxIterations):
+    for iterations in range(maxIterations):
         for clusterCol in clusterColumns:
             X = dfData.loc[:, xColumns]
             denominator = np.zeros((nRows, 1))
@@ -87,4 +86,4 @@ def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
         if delta < tolerance:
             break
 
-    return [dfData, dfCentroids]
+    return [dfData, dfCentroids, iterations]

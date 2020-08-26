@@ -44,7 +44,7 @@ imageMatrix = imageio.imread("./tp1/data/photo003.jpg")
 flatImage = np.array([item for sublist in imageMatrix for item in sublist])
 # flatImage = flatImage[0 : : 100]
 
-data, centroids = cMeans(flatImage, 3, 1e-9, 100, 2)
+data, centroids, *_ = cMeans(flatImage, 3, 1e-9, 100, 2)
 
 printDataAndCentroids3d(data,centroids,["x0", "x1", "x2"])
 data.to_csv("data.csv", compression=None)
