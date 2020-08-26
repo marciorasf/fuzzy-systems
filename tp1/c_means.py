@@ -80,7 +80,7 @@ def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
                     ),
                 )
             )
-        ).sum()
+        ).mean()
         print(delta)
 
         if delta < tolerance:

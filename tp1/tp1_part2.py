@@ -13,6 +13,10 @@ import imageio
 def printDataAndCentroids3d(data, centroids, keys):
     fig = make_subplots(x_title="x", y_title="y")
 
+    pointColors = []
+    for _, row in data.iterrows():
+        pointColors.append(f'rgb({row["x0"]}, {row["x1"]}, {row["x2"]})')
+
     # Add traces
     fig.add_trace(go.Scatter3d(
         x=data[keys[0]], 
@@ -20,11 +24,18 @@ def printDataAndCentroids3d(data, centroids, keys):
         z=data[keys[2]], 
         mode="markers", 
         name="Input points",
+        opacity=0.5,
         marker=dict(
-            color="blue",
-            size=2
+            color=pointColors,
+            size=3
         )
         ))
+
+    centroidColors = []
+    for _, row in centroids.iterrows():
+        centroidColors.append(f'rgb({row["x0"]}, {row["x1"]}, {row["x2"]})')
+
+
     fig.add_trace(go.Scatter3d(
         x=centroids[keys[0]], 
         y=centroids[keys[1]], 
@@ -32,7 +43,7 @@ def printDataAndCentroids3d(data, centroids, keys):
         mode="markers", 
         name="Centroids",
         marker=dict(
-            color="red",
+            color=centroidColors,
             size=15
         )
         ))
@@ -40,12 +51,18 @@ def printDataAndCentroids3d(data, centroids, keys):
 
 
 # %%
-imageMatrix = imageio.imread("./tp1/data/photo003.jpg")
+photo = "photo006"
+imageMatrix = imageio.imread(f"./data/{photo}.jpg")
+print(imageMatrix.shape)
 flatImage = np.array([item for sublist in imageMatrix for item in sublist])
-# flatImage = flatImage[0 : : 100]
+flatImage = flatImage[0 : : 1]
 
-data, centroids, *_ = cMeans(flatImage, 3, 1e-9, 100, 2)
+# %%
+data, centroids, iterations = cMeans(flatImage, 3, 1e-6, 100, 2)
 
+#  %%
 printDataAndCentroids3d(data,centroids,["x0", "x1", "x2"])
-data.to_csv("data.csv", compression=None)
-data.to_csv("centroids.csv", compression=None)
+print(iterations)
+print(centroids)
+data.to_csv(f"data_{photo}.csv", compression=None)
+centroids.to_csv(f"centroids_{photo}.csv", compression=None)
