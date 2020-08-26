@@ -40,7 +40,7 @@ def printDataAndCentroids():
     fig.show()
 
 # %% load data from file
-rawData = loadmat("./fcm_dataset.mat")
+rawData = loadmat("./data/fcm_dataset.mat")
 
 # %% Run C-Means
 data, centroids = cMeans(rawData["x"], 4)
