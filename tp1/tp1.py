@@ -43,6 +43,9 @@ def printDataAndCentroids():
         ))
     fig.show()
 
+# %% load data from file
+rawData = loadmat("./fcm_dataset.mat")
+
 # %% Initialize data
 nClusters = 4
 xDimension = 2
@@ -50,8 +53,6 @@ mParam = 2
 
 xColumns = [f"x{i}" for i in range(xDimension)]
 clusterColumns = [f"k{i}" for i in range(nClusters)]
-
-rawData = loadmat("./K-Means/SyntheticDataset.mat")
 
 data = pd.DataFrame(rawData["x"], columns=xColumns)
 centroids = pd.DataFrame(
@@ -88,4 +89,4 @@ for _ in range(10):
             [np.dot((data[clusterCol] ** mParam), data[xCol]) for xCol in xColumns]
         ] / (data[clusterCol] ** 2).sum()
 
-printCentroids()
+printDataAndCentroids()
