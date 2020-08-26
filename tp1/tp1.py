@@ -2,10 +2,12 @@
 from scipy.io import loadmat
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import numpy as np
 from functools import reduce
 
-# %%
+# %% Declare functions
 def euclNorm(arr):
     return np.linalg.norm(arr, ord=2)
 
@@ -19,6 +21,27 @@ def printCentroids():
     fig = px.scatter(centroids, x="x0", y="x1")
     fig.show()
 
+def printDataAndCentroids():
+    fig = make_subplots(x_title="x", y_title="y")
+
+    # Add traces
+    fig.add_trace(go.Scatter(
+        x=data["x0"], 
+        y=data["x1"], 
+        mode="markers", 
+        name="Input points"
+        ))
+    fig.add_trace(go.Scatter(
+        x=centroids["x0"], 
+        y=centroids["x1"], 
+        mode="markers", 
+        name="Centroids",
+        marker=dict(
+            color="red",
+            size=15
+        )
+        ))
+    fig.show()
 
 # %% Initialize data
 nClusters = 4
