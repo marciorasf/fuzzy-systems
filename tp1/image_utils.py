@@ -1,7 +1,7 @@
 import pandas as pd
 import cv2
 
-def getImage(src, scaleRatio):
+def readImageAndRescale(src, scaleRatio):
     image = cv2.imread(src)
 
     width = int(image.shape[1] * scaleRatio)
@@ -9,3 +9,6 @@ def getImage(src, scaleRatio):
     imageResized = cv2.resize(image, (width, height))
     
     return imageResized 
+
+def writeImage(dest, image):
+    cv2.imwrite(dest, image)
