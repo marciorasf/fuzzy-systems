@@ -14,7 +14,7 @@ def runCMeansForPhoto(photo, scaleRatio, nClusters):
         writeImage(f"./output/{photo}.jpg", image)
 
         flatImage = np.array([item for sublist in image for item in sublist])
-        data, centroids, _ = cMeans(flatImage, nClusters, 1e-6, 100, 2)
+        data, centroids, _ = cMeans(flatImage, nClusters, 1e-5, 200, 2)
 
         data.to_csv(f"output/data_{photo}.csv", compression=None)
         centroids.to_csv(f"output/centroids_{photo}.csv", compression=None)
@@ -37,7 +37,7 @@ nClustersPerPhoto = {
     "photo010": 11,
     "photo011": 3,
 }
-scaleRatio = 0.1
+scaleRatio = 0.5
 
 for photo, nClusters in nClustersPerPhoto.items():
     runCMeansForPhoto(photo, scaleRatio, nClusters)

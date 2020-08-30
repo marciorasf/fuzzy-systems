@@ -65,7 +65,7 @@ def runAnalysis(photo):
 
     xColumns = list(centroids.columns)
 
-    plotDataAndCentroids3d(data, centroids, ["x0", "x1", "x2"])
+    # plotDataAndCentroids3d(data, centroids, ["x0", "x1", "x2"])
 
     processedData = generateSegmentedImage(data, centroids)
     newImage = np.array(processedData.loc[:, xColumns]).reshape(
