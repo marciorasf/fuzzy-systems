@@ -5,17 +5,16 @@ from plotly.subplots import make_subplots
 import numpy as np
 import cv2
 from c_means import cMeans
-from image_utils import readImageAndRescale, writeImage
+from image_utils import readImage, rescaleImage, writeImage
 
 # %%
-def printDataAndCentroids3d(data, centroids, keys):
+def plotDataAndCentroids3d(data, centroids, keys):
     fig = make_subplots(x_title="x", y_title="y")
 
     pointColors = []
     for _, row in data.iterrows():
         pointColors.append(f'rgb({row[keys[2]]}, {row[keys[1]]}, {row[keys[0]]})')
 
-    # Add traces
     fig.add_trace(
         go.Scatter3d(
             x=data[keys[0]],
@@ -45,9 +44,10 @@ def printDataAndCentroids3d(data, centroids, keys):
     fig.show()
 
 
-def runCMeans(photo, scaleRatio, nClusters):
+def runCMeansForPhoto(photo, scaleRatio, nClusters):
     try:
-        image = readImageAndRescale(f"./input/{photo}.jpg", scaleRatio)
+        tempImage = readImage(f"./input/{photo}.jpg")
+        image = rescaleImage(tempImage, scaleRatio)
         writeImage(f"./output/{photo}.jpg", image)
 
         flatImage = np.array([item for sublist in image for item in sublist])
@@ -55,7 +55,7 @@ def runCMeans(photo, scaleRatio, nClusters):
 
         data.to_csv(f"output/data_{photo}.csv", compression=None)
         centroids.to_csv(f"output/centroids_{photo}.csv", compression=None)
-        printDataAndCentroids3d(data, centroids, ["x0", "x1", "x2"])
+        plotDataAndCentroids3d(data, centroids, ["x0", "x1", "x2"])
     except:
         pass
 
@@ -76,5 +76,5 @@ nClustersPerPhoto = {
 scaleRatio = 0.5
 
 for photo, nClusters in nClustersPerPhoto.items():
-    runCMeans(photo, scaleRatio, nClusters)
+    runCMeansForPhoto(photo, scaleRatio, nClusters)
     

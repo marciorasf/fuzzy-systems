@@ -9,14 +9,15 @@ from functools import reduce
 from c_means import cMeans
 from c_means_naive import cMeans as cMeansNaive
 
-# %% Declare functions
-def printDataAndCentroids(data, centroids, keys):
+# %% declare functions
+def plotDataAndCentroids(data, centroids, keys):
     fig = make_subplots(x_title="x", y_title="y")
 
-    # Add traces
+    # add traces
     fig.add_trace(
         go.Scatter(x=data["x0"], y=data["x1"], mode="markers", name="Input points")
     )
+    
     fig.add_trace(
         go.Scatter(
             x=centroids["x0"],
@@ -33,9 +34,6 @@ def printDataAndCentroids(data, centroids, keys):
 rawData = loadmat("./tp1/data/fcm_dataset.mat")
 rawData = np.array(rawData["x"])
 
-# %% Run C-Means
+# %% run C-Means
 data, centroids, iterations = cMeans(rawData, 4, 1e-12, 50, 2)
-
-printDataAndCentroids(data, centroids, ["x0", "x1"])
-print(centroids)
-print(f'iterations: {iterations}')
+plotDataAndCentroids(data, centroids, ["x0", "x1"])
