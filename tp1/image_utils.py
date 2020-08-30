@@ -9,9 +9,9 @@ def rescaleImage(image, scaleRatio):
     width = int(image.shape[1] * scaleRatio)
     height = int(image.shape[0] * scaleRatio)
 
-    imageResized = cv2.resize(image, (width, height))
+    rescaledImage = cv2.resize(image, (width, height))
 
-    return imageResized 
+    return rescaledImage 
 
 def writeImage(dest, image):
     cv2.imwrite(dest, image)
