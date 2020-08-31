@@ -5,7 +5,7 @@ from functools import reduce
 
 
 # %% declare functions
-def fuzzyMountain(data):
+def fuzzyMountain(data, nClusters):
     xColumns = data.columns
 
     centroids = pd.DataFrame(columns=xColumns)
@@ -16,12 +16,23 @@ def fuzzyMountain(data):
 
     centroids = centroids.append(maxDensityPoint)
 
-    densities = updateDensities(
-        data, densities, maxDensityPoint, maxDensity, 1.5)
+    for _ in range(nClusters-1):
+        densities = updateDensities(
+            data,
+            densities,
+            maxDensityPoint,
+            maxDensity,
+            1.5
+        )
+        maxDensityPoint, maxDensity = getMaxDensityPointAndValue(
+            data,
+            densities
+        )
 
-    maxDensityPoint, maxDensity = getMaxDensityPointAndValue(data, densities)
+        if(maxDensityPoint.name in centroids.index):
+            return centroids
 
-    centroids = centroids.append(maxDensityPoint)
+        centroids = centroids.append(maxDensityPoint)
 
     return centroids
 
@@ -36,12 +47,16 @@ def calculateDensities(data, radius):
     )
 
     for row_label, row in data.iterrows():
-        density = reduce(
-            lambda sum, x: sum +
-            np.exp(- ((euclNorm(row - x)**2)/denominator)),
-            data.loc[:, :].to_numpy(),
-            0
-        )
+        temp0 = (data.loc[:, :].to_numpy() - row.to_numpy())**2
+
+        temp1 = euclNormMatrix(temp0)
+
+        temp2 = temp1/denominator
+
+        temp3 = np.exp(-temp2)
+
+        density = temp3.sum()
+
         densities.loc[row_label, "density"] = density
 
     return densities
@@ -75,3 +90,11 @@ def formatData(rawData):
 
 def euclNorm(arr):
     return np.linalg.norm(arr, ord=2)
+
+
+def euclNormMatrix(matrix):
+    result = []
+    for row in matrix:
+        result.append(np.linalg.norm(row, ord=2))
+
+    return np.array(result)
