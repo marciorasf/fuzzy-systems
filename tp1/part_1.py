@@ -1,13 +1,9 @@
 # %%
 from scipy.io import loadmat
-import pandas as pd
-import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
-from functools import reduce
 from c_means import cMeans
-from c_means_naive import cMeans as cMeansNaive
 
 # %% declare functions
 def plotDataAndCentroids(data, centroids, keys):
@@ -31,7 +27,7 @@ def plotDataAndCentroids(data, centroids, keys):
 
 
 # %% load data from file
-rawData = loadmat("./tp1/data/fcm_dataset.mat")
+rawData = loadmat("./input/fcm_dataset.mat")
 rawData = np.array(rawData["x"])
 
 # %% run C-Means
