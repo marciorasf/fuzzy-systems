@@ -6,24 +6,28 @@ from functools import reduce
 
 # %% declare functions
 def fuzzyMountain(data, nClusters):
+    data = formatData(data)
+
     xColumns = data.columns
     normalizedData = normalize(data)
     centroids = pd.DataFrame(columns=xColumns)
 
-    densities = calculateDensities(data, 1)
+    radiusA = 0.1
+    densities = calculateDensities(data, radiusA)
 
     maxDensityPoint, maxDensity = getMaxDensityPointAndValue(
         normalizedData, densities)
 
     centroids = centroids.append(maxDensityPoint)
 
+    radiusB = 1.5*radiusA
     for _ in range(nClusters-1):
         densities = updateDensities(
             normalizedData,
             densities,
             maxDensityPoint,
             maxDensity,
-            1.5
+            radiusB
         )
         maxDensityPoint, maxDensity = getMaxDensityPointAndValue(
             normalizedData,
@@ -89,6 +93,8 @@ def getMaxDensityPointAndValue(data, densities):
 
 
 def updateDensities(data, densities, maxDensityPoint, maxDensity, radius):
+    densities = densities.copy()
+
     denominator = (radius/2)**2
 
     for row_label, row in data.iterrows():
@@ -101,7 +107,7 @@ def updateDensities(data, densities, maxDensityPoint, maxDensity, radius):
 def formatData(rawData):
     xDimension = rawData.shape[1]
     xColumns = [f'x{i}' for i in range(xDimension)]
-    data = pd.DataFrame(rawData, columns=xColumns)
+    data = pd.DataFrame(rawData, columns=xColumns, copy=True)
     return data
 
 
