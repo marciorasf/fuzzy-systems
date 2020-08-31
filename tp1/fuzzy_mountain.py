@@ -1,9 +1,7 @@
 #  %% imports
-from scipy.io import loadmat
 import pandas as pd
 import numpy as np
 from functools import reduce
-import plotly.express as px
 
 
 # %% declare functions
@@ -14,14 +12,14 @@ def fuzzyMountain(data):
 
     densities = calculateDensities(data, 1)
 
-    maxDensityPoint, maxDensity = getMaxDensityPointAndValue(densities)
+    maxDensityPoint, maxDensity = getMaxDensityPointAndValue(data, densities)
 
     centroids = centroids.append(maxDensityPoint)
 
     densities = updateDensities(
         data, densities, maxDensityPoint, maxDensity, 1.5)
 
-    maxDensityPoint, maxDensity = getMaxDensityPointAndValue(densities)
+    maxDensityPoint, maxDensity = getMaxDensityPointAndValue(data, densities)
 
     centroids = centroids.append(maxDensityPoint)
 
@@ -30,6 +28,7 @@ def fuzzyMountain(data):
 
 def calculateDensities(data, radius):
     denominator = (radius/2)**2
+    nPoints = data.shape[0]
 
     densities = pd.DataFrame(
         np.zeros((nPoints, 1)),
@@ -48,7 +47,7 @@ def calculateDensities(data, radius):
     return densities
 
 
-def getMaxDensityPointAndValue(densities):
+def getMaxDensityPointAndValue(data, densities):
     maxDensityIndex = densities["density"].idxmax()
 
     maxDensity = densities.loc[maxDensityIndex, "density"]
@@ -67,8 +66,8 @@ def updateDensities(data, densities, maxDensityPoint, maxDensity, radius):
     return densities
 
 
-def formatData(data):
-    xDimension = data.shape[1]
+def formatData(rawData):
+    xDimension = rawData.shape[1]
     xColumns = [f'x{i}' for i in range(xDimension)]
     data = pd.DataFrame(rawData, columns=xColumns)
     return data
@@ -76,13 +75,3 @@ def formatData(data):
 
 def euclNorm(arr):
     return np.linalg.norm(arr, ord=2)
-
-
-# %% main script
-nPoints = 10
-xDimension = 10
-rawData = np.random.normal(0.5, 0.4, (nPoints, xDimension))
-
-data = formatData(rawData)
-
-centroids = fuzzyMountain(data)
