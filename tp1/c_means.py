@@ -21,7 +21,7 @@ def removeZeros(arr):
     return arr
 
 
-def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
+def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, radiusA=0.1, mParam=2):
     xDimension = data.shape[1]
     nRows = data.shape[0]
     xColumns = [f"x{i}" for i in range(xDimension)]
@@ -29,7 +29,7 @@ def cMeans(data, nClusters, tolerance=1e-15, maxIterations=2, mParam=2):
 
     dfData = pd.DataFrame(data, columns=xColumns)
 
-    mountainCentroids = fuzzyMountain(data, nClusters)
+    mountainCentroids = fuzzyMountain(data, nClusters, radiusA)
     dfCentroids = pd.DataFrame(
         mountainCentroids.to_numpy(), columns=xColumns, index=clusterColumns,
     )

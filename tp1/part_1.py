@@ -31,5 +31,5 @@ rawData = loadmat("./input/fcm_dataset.mat")
 rawData = np.array(rawData["x"])
 
 # %% run C-Means
-data, centroids, iterations = cMeans(rawData, 4, 1e-12, 50, 2)
+data, centroids, iterations = cMeans(rawData, 4, 1e-12, 50, 0.1, 2)
 plotDataAndCentroids(data, centroids, ["x0", "x1"])

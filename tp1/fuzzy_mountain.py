@@ -5,14 +5,13 @@ from functools import reduce
 
 
 # %% declare functions
-def fuzzyMountain(data, nClusters):
+def fuzzyMountain(data, nClusters, radiusA):
     data = formatData(data)
 
     xColumns = data.columns
     normalizedData = normalize(data)
     centroids = pd.DataFrame(columns=xColumns)
 
-    radiusA = 0.1
     densities = calculateDensities(data, radiusA)
 
     maxDensityPoint, maxDensity = getMaxDensityPointAndValue(
