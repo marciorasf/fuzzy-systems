@@ -67,15 +67,8 @@ def calculateDensities(data, radius):
     )
 
     for row_label, row in data.iterrows():
-        temp0 = (data.loc[:, :].to_numpy() - row.to_numpy())**2
-
-        temp1 = euclNormMatrix(temp0)
-
-        temp2 = temp1/denominator
-
-        temp3 = np.exp(-temp2)
-
-        density = temp3.sum()
+        density = np.exp(-(euclNormMatrix(
+            (data.loc[:, :] - row)**2)/denominator)).sum()
 
         densities.loc[row_label, "density"] = density
 
@@ -115,8 +108,10 @@ def euclNorm(arr):
 
 
 def euclNormMatrix(matrix):
-    result = []
-    for row in matrix:
-        result.append(np.linalg.norm(row, ord=2))
+    matrix = np.array(matrix)
+    result = np.zeros(matrix.shape[0])
 
-    return np.array(result)
+    for row in matrix.T:
+        result += np.sqrt(row**2)
+
+    return np.array(result.T)
