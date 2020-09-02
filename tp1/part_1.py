@@ -9,9 +9,8 @@ from c_means import cMeans
 def plotDataAndCentroids(data, centroids, keys):
     fig = make_subplots(x_title="x", y_title="y")
 
-    # add traces
     fig.add_trace(
-        go.Scatter(x=data["x0"], y=data["x1"], mode="markers", name="Input points")
+        go.Scatter(x=data[keys[0]], y=data[keys[1]], mode="markers", name="Input points")
     )
     
     fig.add_trace(

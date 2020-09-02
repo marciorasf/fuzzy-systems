@@ -1,12 +1,7 @@
-from scipy.io import loadmat
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import numpy as np
-from functools import reduce
 import copy
-from fuzzy_mountain import formatData, fuzzyMountain
+from fuzzy_mountain import fuzzyMountain
 
 
 def euclNorm(arr):
