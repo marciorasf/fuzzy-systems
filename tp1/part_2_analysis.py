@@ -9,7 +9,7 @@ from plotly.subplots import make_subplots
 
 
 def plotDataAndCentroids3d(data, centroids, keys):
-    fig = make_subplots(x_title="x", y_title="y")
+    fig = make_subplots()
     data = data.astype(np.int32)
     centroids = centroids.astype(np.int32)
 
@@ -25,7 +25,7 @@ def plotDataAndCentroids3d(data, centroids, keys):
             z=data[keys[2]],
             mode="markers",
             name="Input points",
-            opacity=0.3,
+            opacity=0.1,
             marker=dict(color=pointColors, size=3),
         )
     )
@@ -44,6 +44,16 @@ def plotDataAndCentroids3d(data, centroids, keys):
             name="Centroids",
             marker=dict(color=centroidColors, size=15),
         )
+    )
+
+    fig.update_layout(
+        scene=dict(
+            xaxis_title='BLUE',
+            yaxis_title='GREEN',
+            zaxis_title='RED'
+        ),
+        width=700,
+        # margin=dict(r=20, b=10, l=10, t=10)
     )
     fig.show()
 
@@ -67,7 +77,7 @@ def runAnalysis(photo):
 
     xColumns = list(centroids.columns)
 
-    plotDataAndCentroids3d(data, centroids, ["x0", "x1", "x2"])
+    # plotDataAndCentroids3d(data, centroids, ["x0", "x1", "x2"])
 
     processedData = generateSegmentedImage(data, centroids)
     newImage = np.array(processedData.loc[:, xColumns]).reshape(
@@ -77,7 +87,7 @@ def runAnalysis(photo):
 
 # %% run main script
 photos = [
-    "photo001",
+    # "photo001",
     # "photo002",
     # "photo003",
     # "photo004",
@@ -87,7 +97,7 @@ photos = [
     # "photo008",
     # "photo009",
     # "photo010",
-    # "photo011",
+    "photo011",
 ]
 
 for photo in photos:
