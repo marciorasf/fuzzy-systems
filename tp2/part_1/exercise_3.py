@@ -1,4 +1,4 @@
-from skfuzzy.membership import gaussmf
+from skfuzzy import gaussmf
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
