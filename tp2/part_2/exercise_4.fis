@@ -1,0 +1,41 @@
+[System]
+Name='exercise_4_2'
+Type='sugeno'
+Version=2.0
+NumInputs=2
+NumOutputs=1
+NumRules=3
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='sum'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='serviço'
+Range=[0 10]
+NumMFs=3
+MF1='ruim':'gaussmf',[1.44985236614823 0]
+MF2='bom':'gaussmf',[1.77 5]
+MF3='excelente':'gaussmf',[1.43355225078917 9.9]
+
+[Input2]
+Name='comida'
+Range=[0 10]
+NumMFs=3
+MF1='má-qualidade':'gaussmf',[1.41553633381337 -1.39e-16]
+MF2='deliciosa':'gaussmf',[1.55280046315284 10]
+MF3='boa':'gaussmf',[2.123 5]
+
+[Output1]
+Name='gorjeta'
+Range=[0 0.25]
+NumMFs=3
+MF1='pequena':'constant',[0.05]
+MF2='média':'constant',[0.15]
+MF3='generosa':'constant',[0.25]
+
+[Rules]
+1 1, 1 (1) : 2
+2 0, 2 (1) : 1
+3 2, 3 (1) : 2
