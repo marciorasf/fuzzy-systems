@@ -6,6 +6,7 @@ x = transpose((0:0.05:2*pi));
 y = sin(x);
 trainingData = [x y];
 
+% Load initial fis
 initFis = readfis("exercise_2.fis");
 
 % Define anfis training options
@@ -17,10 +18,10 @@ opt.DisplayStepSize = false;
 opt.DisplayANFISInformation = false;
 opt.DisplayFinalResults = false;
 
-% Train anfis
+% Train ANFIS
 fis = anfis(trainingData, opt);
 
-% Calculate output using trained anfis
+% Calculate output using trained ANFIS
 approxY = evalfis(fis, x);
 
 % Calculate mean squared error
@@ -29,7 +30,10 @@ squaredError = error .^ 2;
 meanSquaredError = mean(squaredError);
 disp("Mean Squared Error = " + meanSquaredError);
 
+% Plot ANFIS output and data output
+figure;
 plot(x, y, '*r', x, approxY, '.b');
 title("ANFIS Approximation");
-xlabel('Input'); ylabel('Output') ;
+xlabel('x');
+ylabel('y') ;
 legend({'y = sin(x)','y = ANFIS(x)'},'Location','southwest');

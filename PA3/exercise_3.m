@@ -18,7 +18,6 @@ end
 nData = length(data);
 time = (leftPadding+1 : nOriginalX);
 
-
 % Separate train and test data
 trainRatio = 0.8;
 trainLastIndex = round(trainRatio * nData);
