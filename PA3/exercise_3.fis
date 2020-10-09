@@ -1,0 +1,50 @@
+[System]
+Name='exercise_3'
+Type='sugeno'
+Version=2.0
+NumInputs=4
+NumOutputs=1
+NumRules=0
+AndMethod='prod'
+OrMethod='probor'
+ImpMethod='prod'
+AggMethod='sum'
+DefuzzMethod='wtaver'
+
+[Input1]
+Name='x-18'
+Range=[0.4 1.35]
+NumMFs=2
+MF1='mf1':'gbellmf',[0.300212121212121 2.5 0.546]
+MF2='mf2':'gbellmf',[0.304 2.5 1.2030303030303]
+
+[Input2]
+Name='x-12'
+Range=[0.4 1.35]
+NumMFs=2
+MF1='mf1':'gbellmf',[0.265 2.5 0.539575757575757]
+MF2='mf2':'gbellmf',[0.303888888888889 2.5 1.2]
+
+[Input3]
+Name='x-6'
+Range=[0.4 1.35]
+NumMFs=2
+MF1='mf1':'gbellmf',[0.286989898989899 2.5 0.517]
+MF2='mf2':'gbellmf',[0.318 2.5 1.22333333333333]
+
+[Input4]
+Name='x-0'
+Range=[0.4 1.35]
+NumMFs=2
+MF1='mf1':'gbellmf',[0.28150505050505 2.5 0.534]
+MF2='mf2':'gbellmf',[0.30469696969697 2.5 1.22]
+
+[Output1]
+Name='ys'
+Range=[0 1]
+NumMFs=3
+MF1='mf1':'constant',[0]
+MF2='mf2':'constant',[0.5]
+MF3='mf3':'constant',[1]
+
+[Rules]
